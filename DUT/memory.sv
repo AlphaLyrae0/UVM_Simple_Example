@@ -13,24 +13,13 @@ module memory
 
     logic   [7:0]   mem     [0:15];
 
-    initial begin
-        for ( int i = 0; i < 16; ++i ) begin
-            mem[i] = '1;
-        end
-    end
+    initial for ( int i = 0; i < 16; ++i ) mem[i] = '1;
 
-    always_ff @(posedge clk) begin
-        if ( reset ) begin
-            rdata <= '0;
-        end
+    always_ff @(posedge clk)
+        if ( reset ) rdata <= '0;
         else if ( en ) begin
-            if ( we ) begin
-                mem[addr] <= wdata; // write
-            end
-            else begin
-                rdata <= mem[addr]; // read
-            end
+            if ( we )   mem[addr] <= wdata; // write
+            else        rdata     <= mem[addr]; // read
         end
-    end
 
 endmodule

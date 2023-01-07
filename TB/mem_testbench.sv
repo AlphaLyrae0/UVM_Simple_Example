@@ -1,22 +1,19 @@
 
-`include "memory.sv"
-`include "mem_if.sv"
-
+`include "uvm_macros.svh"
 module mem_testbench;
 
-    `include "uvm_macros.svh"
     import uvm_pkg::*;
-    `include "mem_model.svh"
-    `include "mem_test.sv"
-    
+
+    import mem_test_lib_pkg::*;
+
     bit     clk;
     always #5   clk = ~clk;
-  
+
     bit     reset = 1;
     initial #20 reset =0;
-    
+
     mem_if mif(.clk, .reset);
-    
+
     memory DUT
         (
             .clk    (mif.clk),
@@ -27,13 +24,10 @@ module mem_testbench;
             .wdata  (mif.wdata),
             .rdata  (mif.rdata)
         );
-    
+
     initial begin 
-        uvm_config_db#(virtual mem_if)::set(uvm_root::get(), "*", "vif", mif);
         $dumpfile("dump.vcd"); $dumpvars;
-    end
-    
-    initial begin 
+        uvm_config_db#(virtual mem_if)::set(uvm_root::get(), "*", "vif", mif);
         run_test();
     end
 
