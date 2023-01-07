@@ -1,83 +1,84 @@
 TOP_MODULE := mem_testbench
-SRCS       := ../mem_testbench.sv
+WORKLIB    := ./xsim.dir/work
 
-.PHONY: all
-all: run
+.PHONY : all
+all :
+	make run_mem_test
 
-.PHONY: run
-run : ./xsim.dir/work.mem_testbench/axsim ./axsim.sh
-	./axsim.sh --testplusarg "UVM_TESTNAME=mem_test"
+.PHONY : run_%
+run_% : $(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh
+	./axsim.sh --testplusarg "UVM_TESTNAME=$*"
 #	xsim $(TOP_MODULE) -R --testplusarg "UVM_TESTNAME=mem_test"
 
 .PHONY: gui
-gui : ./xsim.dir/work.mem_testbench/xsimk
+gui : $(WORKLIB).$(TOP_MODULE)/xsimk
 	xsim $(TOP_MODULE) --gui --testplusarg "UVM_TESTNAME=mem_test" &
 
 
 .PHONY : dut
-dut : ./xsim.dir/work/memory.sdb
-./xsim.dir/work/memory.sdb : ./DUT/memory.sv
+dut : $(WORKLIB)/memory.sdb
+$(WORKLIB)/memory.sdb : ./DUT/memory.sv
 	xvlog -sv $< -L uvm
 
 .PHONY : agent
-agent : ./xsim.dir/work/mem_if.sdb ./xsim.dir/work/mem_agent_pkg.sdb
-./xsim.dir/work/mem_if.sdb : ./TB/mem_agent_pkg/mem_if.sv
+agent : $(WORKLIB)/mem_if.sdb $(WORKLIB)/mem_agent_pkg.sdb
+$(WORKLIB)/mem_if.sdb : ./TB/mem_agent_pkg/mem_if.sv
 	xvlog -sv $< -L uvm
-./xsim.dir/work/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_agent.svh
-./xsim.dir/work/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_driver.svh
-./xsim.dir/work/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_monitor.svh
-./xsim.dir/work/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_sequencer.svh
-./xsim.dir/work/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_seq_item.svh
-./xsim.dir/work/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_agent_pkg.sv
+$(WORKLIB)/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_agent.svh
+$(WORKLIB)/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_driver.svh
+$(WORKLIB)/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_monitor.svh
+$(WORKLIB)/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_sequencer.svh
+$(WORKLIB)/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_seq_item.svh
+$(WORKLIB)/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_agent_pkg.sv
 	xvlog -sv $< -L uvm --include ./TB/mem_agent_pkg
 
 .PHONY : env
-env : ./xsim.dir/work/mem_env_pkg.sdb
-./xsim.dir/work/mem_env_pkg.sdb : ./xsim.dir/work/mem_agent_pkg.sdb
-./xsim.dir/work/mem_env_pkg.sdb : ./TB/mem_env_pkg/mem_scoreboard.svh
-./xsim.dir/work/mem_env_pkg.sdb : ./TB/mem_env_pkg/mem_env.svh
-./xsim.dir/work/mem_env_pkg.sdb : ./TB/mem_env_pkg/mem_env_pkg.sv
+env : $(WORKLIB)/mem_env_pkg.sdb
+$(WORKLIB)/mem_env_pkg.sdb : $(WORKLIB)/mem_agent_pkg.sdb
+$(WORKLIB)/mem_env_pkg.sdb : ./TB/mem_env_pkg/mem_scoreboard.svh
+$(WORKLIB)/mem_env_pkg.sdb : ./TB/mem_env_pkg/mem_env.svh
+$(WORKLIB)/mem_env_pkg.sdb : ./TB/mem_env_pkg/mem_env_pkg.sv
 	xvlog -sv $< -L uvm --include ./TB/mem_env_pkg
 
 .PHONY : seq
-seq : ./xsim.dir/work/mem_sequence_lib_pkg.sdb
-./xsim.dir/work/mem_sequence_lib_pkg.sdb : ./xsim.dir/work/mem_agent_pkg.sdb
-./xsim.dir/work/mem_sequence_lib_pkg.sdb : ./TB/mem_sequence_lib_pkg/mem_sequence_lib_pkg.sv
+seq : $(WORKLIB)/mem_sequence_lib_pkg.sdb
+$(WORKLIB)/mem_sequence_lib_pkg.sdb : $(WORKLIB)/mem_agent_pkg.sdb
+$(WORKLIB)/mem_sequence_lib_pkg.sdb : ./TB/mem_sequence_lib_pkg/mem_sequence_lib_pkg.sv
 	xvlog -sv $< -L uvm --include ./TB/mem_sequence_lib_pkg
 
 .PHONY : test
-test : ./xsim.dir/work/mem_test_lib_pkg.sdb
-./xsim.dir/work/mem_test_lib_pkg.sdb : ./xsim.dir/work/mem_sequence_lib_pkg.sdb
-./xsim.dir/work/mem_test_lib_pkg.sdb : ./xsim.dir/work/mem_env_pkg.sdb
-./xsim.dir/work/mem_test_lib_pkg.sdb : ./TB/mem_test_lib_pkg/mem_test_lib_pkg.sv
+test : $(WORKLIB)/mem_test_lib_pkg.sdb
+$(WORKLIB)/mem_test_lib_pkg.sdb : $(WORKLIB)/mem_sequence_lib_pkg.sdb
+$(WORKLIB)/mem_test_lib_pkg.sdb : $(WORKLIB)/mem_env_pkg.sdb
+$(WORKLIB)/mem_test_lib_pkg.sdb : ./TB/mem_test_lib_pkg/mem_test_lib_pkg.sv
 	xvlog -sv $< -L uvm --include ./TB/mem_test_lib_pkg
 
 .PHONY : tb
-tb : ./xsim.dir/work/mem_testbench.sdb
-./xsim.dir/work/mem_testbench.sdb : ./xsim.dir/work/mem_test_lib_pkg.sdb
-./xsim.dir/work/mem_testbench.sdb : ./TB/mem_testbench.sv
+tb : $(WORKLIB)/mem_testbench.sdb
+$(WORKLIB)/mem_testbench.sdb : $(WORKLIB)/mem_test_lib_pkg.sdb
+$(WORKLIB)/mem_testbench.sdb : ./TB/mem_testbench.sv
 	xvlog -sv $< -L uvm
 
 .PHONY : build
-build : ./xsim.dir/work.mem_testbench/axsim
-xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/memory.sdb
-xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/mem_if.sdb
-xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/mem_agent_pkg.sdb
-xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/mem_env_pkg.sdb
-xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/mem_sequence_lib_pkg.sdb
-xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/mem_test_lib_pkg.sdb
-xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/mem_testbench.sdb
+build : $(WORKLIB).$(WORKLIB)/axsim
+$(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh : $(WORKLIB)/memory.sdb
+$(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh : $(WORKLIB)/mem_if.sdb
+$(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh : $(WORKLIB)/mem_agent_pkg.sdb
+$(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh : $(WORKLIB)/mem_env_pkg.sdb
+$(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh : $(WORKLIB)/mem_sequence_lib_pkg.sdb
+$(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh : $(WORKLIB)/mem_test_lib_pkg.sdb
+$(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh : $(WORKLIB)/mem_testbench.sdb
 	xelab $(TOP_MODULE) -L uvm -timescale 1ns/1ps --standalone
 
 .PHONY : build_gui
-build_gui : ./xsim.dir/work.mem_testbench/xsimk
-xsim.dir/work.mem_testbench/xsimk : ./xsim.dir/work/memory.sdb
-xsim.dir/work.mem_testbench/xsimk : ./xsim.dir/work/mem_if.sdb
-xsim.dir/work.mem_testbench/xsimk : ./xsim.dir/work/mem_agent_pkg.sdb
-xsim.dir/work.mem_testbench/xsimk : ./xsim.dir/work/mem_env_pkg.sdb
-xsim.dir/work.mem_testbench/xsimk : ./xsim.dir/work/mem_sequence_lib_pkg.sdb
-xsim.dir/work.mem_testbench/xsimk : ./xsim.dir/work/mem_test_lib_pkg.sdb
-xsim.dir/work.mem_testbench/xsimk : ./xsim.dir/work/mem_testbench.sdb
+build_gui : $(WORKLIB).$(TOP_MODULE)/xsimk
+$(WORKLIB).$(TOP_MODULE)/xsimk : $(WORKLIB)/memory.sdb
+$(WORKLIB).$(TOP_MODULE)/xsimk : $(WORKLIB)/mem_if.sdb
+$(WORKLIB).$(TOP_MODULE)/xsimk : $(WORKLIB)/mem_agent_pkg.sdb
+$(WORKLIB).$(TOP_MODULE)/xsimk : $(WORKLIB)/mem_env_pkg.sdb
+$(WORKLIB).$(TOP_MODULE)/xsimk : $(WORKLIB)/mem_sequence_lib_pkg.sdb
+$(WORKLIB).$(TOP_MODULE)/xsimk : $(WORKLIB)/mem_test_lib_pkg.sdb
+$(WORKLIB).$(TOP_MODULE)/xsimk : $(WORKLIB)/mem_testbench.sdb
 	xelab $(TOP_MODULE) -L uvm -timescale 1ns/1ps --debug typical
 
 .PHONY: clean
