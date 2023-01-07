@@ -16,9 +16,6 @@ package mem_sequence_lib_pkg;
 
         virtual task body();
             repeat ( 64 ) begin
-                mem_seq_item req;
-                mem_seq_item rsp;
-
                 `uvm_create(req)
                 req.randomize();
                 `uvm_send(req)

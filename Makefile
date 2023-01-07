@@ -8,9 +8,14 @@ all: run
 build : elab
 
 .PHONY: run
-run : ./axsim.sh ./xsim.dir/work.mem_testbench/axsim
+run : ./xsim.dir/work.mem_testbench/axsim ./axsim.sh
 	./axsim.sh --testplusarg "UVM_TESTNAME=mem_test"
 #	xsim $(TOP_MODULE) -R --testplusarg "UVM_TESTNAME=mem_test"
+
+.PHONY: gui
+gui : ./xsim.dir/work.mem_testbench/xsimk
+	xsim $(TOP_MODULE) --gui --testplusarg "UVM_TESTNAME=mem_test" &
+
 
 .PHONY : dut
 dut : ./xsim.dir/work/memory.sdb
@@ -58,18 +63,25 @@ tb : ./xsim.dir/work/mem_testbench.sdb
 
 .PHONY : elab
 elab : ./xsim.dir/work.mem_testbench/axsim
-xsim.dir/work.mem_testbench/axsim : ./xsim.dir/work/memory.sdb ./xsim.dir/work/mem_if.sdb ./xsim.dir/work/mem_agent_pkg.sdb ./xsim.dir/work/mem_env_pkg.sdb ./xsim.dir/work/mem_sequence_lib_pkg.sdb ./xsim.dir/work/mem_test_lib_pkg.sdb ./xsim.dir/work/mem_testbench.sdb
+xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/memory.sdb
+xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/mem_if.sdb
+xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/mem_agent_pkg.sdb
+xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/mem_env_pkg.sdb
+xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/mem_sequence_lib_pkg.sdb
+xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/mem_test_lib_pkg.sdb
+xsim.dir/work.mem_testbench/axsim ./axsim.sh : ./xsim.dir/work/mem_testbench.sdb
 	xelab $(TOP_MODULE) -L uvm -timescale 1ns/1ps --incr --standalone
 
 .PHONY : elabg
 elabg : ./xsim.dir/work.mem_testbench/xsimk
-xsim.dir/work.mem_testbench/xsimk : ./xsim.dir/work/memory.sdb ./xsim.dir/work/mem_if.sdb ./xsim.dir/work/mem_agent_pkg.sdb ./xsim.dir/work/mem_env_pkg.sdb ./xsim.dir/work/mem_sequence_lib_pkg.sdb ./xsim.dir/work/mem_test_lib_pkg.sdb ./xsim.dir/work/mem_testbench.sdb
+xsim.dir/work.mem_testbench/xsimk ./axsim.sh : ./xsim.dir/work/memory.sdb
+xsim.dir/work.mem_testbench/xsimk ./axsim.sh : ./xsim.dir/work/mem_if.sdb
+xsim.dir/work.mem_testbench/xsimk ./axsim.sh : ./xsim.dir/work/mem_agent_pkg.sdb
+xsim.dir/work.mem_testbench/xsimk ./axsim.sh : ./xsim.dir/work/mem_env_pkg.sdb
+xsim.dir/work.mem_testbench/xsimk ./axsim.sh : ./xsim.dir/work/mem_sequence_lib_pkg.sdb
+xsim.dir/work.mem_testbench/xsimk ./axsim.sh : ./xsim.dir/work/mem_test_lib_pkg.sdb
+xsim.dir/work.mem_testbench/xsimk ./axsim.sh : ./xsim.dir/work/mem_testbench.sdb
 	xelab $(TOP_MODULE) -L uvm -timescale 1ns/1ps --incr --debug typical
-
-.PHONY: gui
-gui : ./xsim.dir/work.mem_testbench/xsimk
-	xsim $(TOP_MODULE) --gui --testplusarg "UVM_TESTNAME=mem_test" &
-
 
 .PHONY: clean
 clean:
