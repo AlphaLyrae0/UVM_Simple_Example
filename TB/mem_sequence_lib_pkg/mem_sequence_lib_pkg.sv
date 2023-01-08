@@ -14,11 +14,14 @@ package mem_sequence_lib_pkg;
             super.new(name);
         endfunction
 
+        int rep_times = 64;
+
         virtual task body();
-            repeat ( 64 ) begin
-                `uvm_create(req)
-                req.randomize();
-                `uvm_send(req)
+            repeat ( rep_times) begin
+              //`uvm_create(req)
+              //req.randomize();
+              //`uvm_send(req)
+                `uvm_do(req)
                 get_response(rsp);
             end
         endtask
