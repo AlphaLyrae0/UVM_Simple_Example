@@ -22,16 +22,20 @@ class mem_driver extends uvm_driver #(mem_seq_item);
         forever begin
             seq_item_port.get(req);
             vif.en    = 1'b1; //req.en;
-            vif.we    = req.we;
+            vif.we    = 1'b0;
+            vif.wdata =   '0;
             vif.addr  = req.addr;
-            vif.wdata = req.wdata;
+            if (req.acc == WRITE) begin
+                vif.we    = 1'b1;
+                vif.wdata = req.data;
+            end
             @(negedge vif.clk);
             vif.en = 1'b0;
-            if (!req.we)
+            if (req.acc == READ)
                 @(negedge vif.clk);
             rsp = RSP::type_id::create("rsp");
             rsp.set_id_info(req);
-            rsp.rdata = vif.rdata;
+            rsp.data = vif.rdata;
             seq_item_port.put(rsp);
         end
     endtask

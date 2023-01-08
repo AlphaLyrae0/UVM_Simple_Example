@@ -25,14 +25,15 @@ class mem_monitor extends uvm_monitor;
             if ( !vif.reset ) begin
                 if (vif.en) begin
                     trans_collected       = mem_seq_item::type_id::create("trans_collected");
-                  //trans_collected.en    = vif.en;
-                    trans_collected.we    = vif.we;
                     trans_collected.addr  = vif.addr;
-                    if (vif.we)
-                        trans_collected.wdata = vif.wdata;
+                    if (vif.we) begin
+                        trans_collected.acc  = WRITE;
+                        trans_collected.data = vif.wdata;
+                    end
                     else begin
                         @(posedge vif.clk);
-                        trans_collected.rdata = vif.rdata;
+                        trans_collected.acc  = READ;
+                        trans_collected.data = vif.rdata;
                     end
                     item_collected_port.write(trans_collected);
                 end

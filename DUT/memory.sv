@@ -13,7 +13,7 @@ module memory
 
     logic   [7:0]   mem     [0:15];
 
-    initial for ( int i = 0; i < 16; ++i ) mem[i] = '1;
+  //initial for ( int i = 0; i < 16; ++i ) mem[i] = '1;
 
     always_ff @(posedge clk)
         if ( reset ) rdata <= '0;

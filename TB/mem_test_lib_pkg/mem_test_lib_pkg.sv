@@ -27,15 +27,15 @@ package mem_test_lib_pkg;
 
         uvm_sequencer_base m_sequencer;
 
+        virtual function void connect_phase(uvm_phase phase);
+            m_sequencer = env.sqr;
+        endfunction
+
         virtual task run_phase(uvm_phase phase);
             phase.raise_objection(this);
             seq.start(m_sequencer);
             phase.drop_objection(this);
         endtask
-
-        virtual function void connect_phase(uvm_phase phase);
-            m_sequencer = env.sqr;
-        endfunction
 
     endclass
 

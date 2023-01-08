@@ -10,9 +10,9 @@ run_% : $(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh
 	./axsim.sh --testplusarg "UVM_TESTNAME=$*"
 #	xsim $(TOP_MODULE) -R --testplusarg "UVM_TESTNAME=mem_test"
 
-.PHONY: gui
-gui : $(WORKLIB).$(TOP_MODULE)/xsimk
-	xsim $(TOP_MODULE) --gui --testplusarg "UVM_TESTNAME=mem_test" &
+.PHONY: gui_%
+gui_% : $(WORKLIB).$(TOP_MODULE)/xsimk
+	xsim $(TOP_MODULE) --gui --testplusarg "UVM_TESTNAME=$*" &
 
 
 .PHONY : dut
