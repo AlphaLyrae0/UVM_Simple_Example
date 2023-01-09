@@ -86,11 +86,7 @@ clean:
 	rm -fr xsim.dir axsim.sh
 	rm -fr *.pb
 	rm -rf *.log *.jou *.str
-
-.PHONY: distclean
-distclean: clean
-	rm -fr *.vcd
-	rm -fr *.wdb
+	rm -fr *.vcd *.wdb
 
 .PHONY : git_add
 git_add :
