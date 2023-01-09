@@ -22,36 +22,36 @@ $(WORKLIB)/memory.sdb : ./DUT/memory.sv
 
 .PHONY : agent
 agent : $(WORKLIB)/mem_if.sdb $(WORKLIB)/mem_agent_pkg.sdb
-$(WORKLIB)/mem_if.sdb : ./TB/mem_agent_pkg/mem_if.sv
+$(WORKLIB)/mem_if.sdb : ./Agent/mem_if.sv
 	xvlog -sv $< -L uvm
-$(WORKLIB)/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_agent.svh
-$(WORKLIB)/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_driver.svh
-$(WORKLIB)/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_monitor.svh
-$(WORKLIB)/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_sequencer.svh
-$(WORKLIB)/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_seq_item.svh
-$(WORKLIB)/mem_agent_pkg.sdb : ./TB/mem_agent_pkg/mem_agent_pkg.sv
-	xvlog -sv $< -L uvm --include ./TB/mem_agent_pkg
+$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_agent.svh
+$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_driver.svh
+$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_monitor.svh
+$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_sequencer.svh
+$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_seq_item.svh
+$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_agent_pkg.sv
+	xvlog -sv $< -L uvm --include ./Agent
 
 .PHONY : env
 env : $(WORKLIB)/mem_env_pkg.sdb
 $(WORKLIB)/mem_env_pkg.sdb : $(WORKLIB)/mem_agent_pkg.sdb
-$(WORKLIB)/mem_env_pkg.sdb : ./TB/mem_env_pkg/mem_scoreboard.svh
-$(WORKLIB)/mem_env_pkg.sdb : ./TB/mem_env_pkg/mem_env.svh
-$(WORKLIB)/mem_env_pkg.sdb : ./TB/mem_env_pkg/mem_env_pkg.sv
-	xvlog -sv $< -L uvm --include ./TB/mem_env_pkg
+$(WORKLIB)/mem_env_pkg.sdb : ./Env/mem_scoreboard.svh
+$(WORKLIB)/mem_env_pkg.sdb : ./Env/mem_env.svh
+$(WORKLIB)/mem_env_pkg.sdb : ./Env/mem_env_pkg.sv
+	xvlog -sv $< -L uvm --include ./Env
 
 .PHONY : seq
 seq : $(WORKLIB)/mem_sequence_lib_pkg.sdb
 $(WORKLIB)/mem_sequence_lib_pkg.sdb : $(WORKLIB)/mem_agent_pkg.sdb
-$(WORKLIB)/mem_sequence_lib_pkg.sdb : ./TB/mem_sequence_lib_pkg/mem_sequence_lib_pkg.sv
-	xvlog -sv $< -L uvm --include ./TB/mem_sequence_lib_pkg
+$(WORKLIB)/mem_sequence_lib_pkg.sdb : ./Seq/mem_sequence_lib_pkg.sv
+	xvlog -sv $< -L uvm --include ./Seq
 
 .PHONY : test
 test : $(WORKLIB)/mem_test_lib_pkg.sdb
 $(WORKLIB)/mem_test_lib_pkg.sdb : $(WORKLIB)/mem_sequence_lib_pkg.sdb
 $(WORKLIB)/mem_test_lib_pkg.sdb : $(WORKLIB)/mem_env_pkg.sdb
-$(WORKLIB)/mem_test_lib_pkg.sdb : ./TB/mem_test_lib_pkg/mem_test_lib_pkg.sv
-	xvlog -sv $< -L uvm --include ./TB/mem_test_lib_pkg
+$(WORKLIB)/mem_test_lib_pkg.sdb : ./Test/mem_test_lib_pkg.sv
+	xvlog -sv $< -L uvm --include ./Test
 
 .PHONY : tb
 tb : $(WORKLIB)/mem_testbench.sdb
