@@ -6,12 +6,12 @@ all :
 	make run_mem_test
 
 .PHONY : run_%
-run_% : $(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh
+run_% : build
 	./axsim.sh --testplusarg "UVM_TESTNAME=$*"
 #	xsim $(TOP_MODULE) -R --testplusarg "UVM_TESTNAME=mem_test"
 
 .PHONY: gui_%
-gui_% : $(WORKLIB).$(TOP_MODULE)/xsimk
+gui_% : build_gui
 	xsim $(TOP_MODULE) --gui --testplusarg "UVM_TESTNAME=$*" &
 
 
@@ -60,7 +60,7 @@ $(WORKLIB)/mem_testbench.sdb : ./TB/mem_testbench.sv
 	xvlog -sv $< -L uvm
 
 .PHONY : build
-build : $(WORKLIB).$(WORKLIB)/axsim
+build : $(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh
 $(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh : $(WORKLIB)/memory.sdb
 $(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh : $(WORKLIB)/mem_if.sdb
 $(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh : $(WORKLIB)/mem_agent_pkg.sdb
