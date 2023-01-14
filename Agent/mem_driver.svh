@@ -20,7 +20,8 @@ class mem_driver extends uvm_driver #(mem_seq_item);
         @(negedge vif.reset);
         @(negedge vif.clk);
         forever begin
-            seq_item_port.get(req);
+          //this.seq_item_port.get(req);
+            this.seq_item_port.get_next_item(req);
             vif.en    = 1'b1; //req.en;
             vif.we    = 1'b0;
             vif.wdata =   '0;
@@ -31,12 +32,15 @@ class mem_driver extends uvm_driver #(mem_seq_item);
             end
             @(negedge vif.clk);
             vif.en = 1'b0;
-            if (req.acc == READ)
+            if (req.acc == READ) begin
                 @(negedge vif.clk);
-            rsp = RSP::type_id::create("rsp");
-            rsp.set_id_info(req);
-            rsp.data = vif.rdata;
-            seq_item_port.put(rsp);
+                req.data = vif.rdata;
+            end
+            this.seq_item_port.item_done();
+          //rsp = RSP::type_id::create("rsp");
+          //rsp.set_id_info(req);
+          //rsp.data = vif.rdata;
+          //seq_item_port.put(rsp);
         end
     endtask
 

@@ -22,7 +22,10 @@ package mem_sequence_lib_pkg;
               //req.randomize();
               //`uvm_send(req)
                 `uvm_do(req)
-                get_response(rsp);
+              //this.start_item(req);
+              //this.req.randomize();
+              //this.finish_item(req)
+              //get_response(rsp);
             end
         endtask
 
