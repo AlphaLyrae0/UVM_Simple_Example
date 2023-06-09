@@ -30,19 +30,12 @@ $(WORKLIB)/memory.sdb : ./DUT/memory.sv
 agent : $(WORKLIB)/mem_if.sdb $(WORKLIB)/mem_agent_pkg.sdb
 $(WORKLIB)/mem_if.sdb : ./Agent/mem_if.sv
 	$(VLOG) -sv $< -L uvm
-$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_agent.svh
-$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_driver.svh
-$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_monitor.svh
-$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_sequencer.svh
-$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_seq_item.svh
-$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_agent_pkg.sv
+$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_agent_pkg.sv $(shell ls ./Agent/*.svh)
 	$(VLOG) -sv $< -L uvm --include ./Agent
 
 .PHONY : env
 env : $(WORKLIB)/mem_env_pkg.sdb
-$(WORKLIB)/mem_env_pkg.sdb : ./Env/mem_scoreboard.svh
-$(WORKLIB)/mem_env_pkg.sdb : ./Env/mem_env.svh
-$(WORKLIB)/mem_env_pkg.sdb : ./Env/mem_env_pkg.sv
+$(WORKLIB)/mem_env_pkg.sdb : ./Env/mem_env_pkg.sv $(shell ls ./Env/*.svh)
 	make $(WORKLIB)/mem_agent_pkg.sdb
 	$(VLOG) -sv $< -L uvm --include ./Env
 
