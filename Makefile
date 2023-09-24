@@ -1,10 +1,10 @@
- VIVADO_VER := /tools/Xilinx/Vivado/2022.2
+#VIVADO_VER := /tools/Xilinx/Vivado/2022.2
+ VIVADO_VER := /tools/Xilinx/Vivado/2023.1
  VLOG := $(VIVADO_VER)/bin/xvlog
  ELAB := $(VIVADO_VER)/bin/xelab
  SIM  := $(VIVADO_VER)/bin/xsim
 
 TOP_MODULE := mem_testbench
-WORKLIB    := ./xsim.dir/work
 
 .PHONY : all
 all :
@@ -20,60 +20,32 @@ run_% : build
 gui_% : build_gui
 	$(SIM) $(TOP_MODULE) --gui --testplusarg "UVM_TESTNAME=$*" &
 
+SRC_FILES += ./DUT/memory.sv
+SRC_FILES += ./Agent/mem_agent_pkg.sv ./Agent/mem_if.sv
+SRC_FILES += ./Env/mem_env_pkg.sv
+SRC_FILES += ./Seq/mem_sequence_lib_pkg.sv
+SRC_FILES += ./Test/mem_test_lib_pkg.sv
+SRC_FILES += ./TB/mem_testbench.sv
 
-.PHONY : dut
-dut : $(WORKLIB)/memory.sdb
-$(WORKLIB)/memory.sdb : ./DUT/memory.sv
-	$(VLOG) -sv $< -L uvm
+INC_FILES += $(shell ls ./Agent/*.svh)
+INC_FILES += $(shell ls ./Env/*.svh)
 
-.PHONY : agent
-agent : $(WORKLIB)/mem_if.sdb $(WORKLIB)/mem_agent_pkg.sdb
-$(WORKLIB)/mem_if.sdb : ./Agent/mem_if.sv
-	$(VLOG) -sv $< -L uvm
-$(WORKLIB)/mem_agent_pkg.sdb : ./Agent/mem_agent_pkg.sv $(shell ls ./Agent/*.svh)
-	$(VLOG) -sv $< -L uvm --include ./Agent
+INC_OPT += --include ./Agent
+INC_OPT += --include ./Env
+INC_OPT += --include ./Seq
+INC_OPT += --include ./Test
 
-.PHONY : env
-env : $(WORKLIB)/mem_env_pkg.sdb
-$(WORKLIB)/mem_env_pkg.sdb : ./Env/mem_env_pkg.sv $(shell ls ./Env/*.svh)
-	make $(WORKLIB)/mem_agent_pkg.sdb
-	$(VLOG) -sv $< -L uvm --include ./Env
-
-.PHONY : seq
-seq : $(WORKLIB)/mem_sequence_lib_pkg.sdb
-$(WORKLIB)/mem_sequence_lib_pkg.sdb : ./Seq/mem_sequence_lib_pkg.sv
-	make $(WORKLIB)/mem_agent_pkg.sdb
-	$(VLOG) -sv $< -L uvm --include ./Seq
-
-.PHONY : test
-test : $(WORKLIB)/mem_test_lib_pkg.sdb
-$(WORKLIB)/mem_test_lib_pkg.sdb : ./Test/mem_test_lib_pkg.sv
-	make $(WORKLIB)/mem_sequence_lib_pkg.sdb
-	make $(WORKLIB)/mem_env_pkg.sdb
-	$(VLOG) -sv $< -L uvm --include ./Test
-
-.PHONY : tb
-tb : $(WORKLIB)/mem_testbench.sdb
-$(WORKLIB)/mem_testbench.sdb : ./TB/mem_testbench.sv
-	make $(WORKLIB)/mem_test_lib_pkg.sdb
-	$(VLOG) -sv $< -L uvm
-
-COMP_FILES := $(WORKLIB)/memory.sdb
-COMP_FILES += $(WORKLIB)/mem_if.sdb
-COMP_FILES += $(WORKLIB)/mem_agent_pkg.sdb
-COMP_FILES += $(WORKLIB)/mem_env_pkg.sdb
-COMP_FILES += $(WORKLIB)/mem_sequence_lib_pkg.sdb
-COMP_FILES += $(WORKLIB)/mem_test_lib_pkg.sdb
-COMP_FILES += $(WORKLIB)/mem_testbench.sdb
 .PHONY : build
-build : $(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh
-$(WORKLIB).$(TOP_MODULE)/axsim ./axsim.sh : $(COMP_FILES)
-	$(ELAB) $(TOP_MODULE) -L uvm -timescale 1ns/1ps --standalone
+build : ./xsim.dir/alone/axsim ./axsim.sh
+./xsim.dir/alone/axsim ./axsim.sh : $(SRC_FILES) $(INC_FILES)
+	$(VLOG) -L uvm -sv $(INC_OPT) $(SRC_FILES) 
+	$(ELAB) $(TOP_MODULE) -L uvm -timescale 1ns/1ps --snapshot alone --standalone
 
 .PHONY : build_gui
-build_gui : $(WORKLIB).$(TOP_MODULE)/xsimk
-$(WORKLIB).$(TOP_MODULE)/xsimk : $(COMP_FILES)
-	$(ELAB) $(TOP_MODULE) -L uvm -timescale 1ns/1ps --debug typical
+build_gui : ./xsim.dir/debug/xsimk
+./xsim.dir/debug/xsimk : $(SRC_FILES) $(INC_FILES)
+	$(VLOG) -L uvm -sv $(INC_OPT) $(SRC_FILES) 
+	$(ELAB) $(TOP_MODULE) -L uvm -timescale 1ns/1ps --snapshot debug --debug typical
 
 .PHONY: clean
 clean:
