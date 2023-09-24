@@ -12,13 +12,13 @@ all :
 
 .PHONY : run_%
 run_% : build
-	./axsim.sh --testplusarg "UVM_TESTNAME=$*"
+	./axsim.sh --testplusarg UVM_TESTNAME=$*
 	mv xsim.log xsim_$*.log
-#	$(SIM) $(TOP_MODULE) -R --testplusarg "UVM_TESTNAME=mem_test"
+#	$(SIM) $(TOP_MODULE).debug -R --testplusarg UVM_TESTNAME=mem_test
 
 .PHONY: gui_%
 gui_% : build_gui
-	$(SIM) $(TOP_MODULE) --gui --testplusarg "UVM_TESTNAME=$*" &
+	$(SIM) $(TOP_MODULE).debug --gui --testplusarg UVM_TESTNAME=$* &
 
 SRC_FILES += ./DUT/memory.sv
 SRC_FILES += ./Agent/mem_agent_pkg.sv ./Agent/mem_if.sv
@@ -36,16 +36,16 @@ INC_OPT += --include ./Seq
 INC_OPT += --include ./Test
 
 .PHONY : build
-build : ./xsim.dir/alone/axsim ./axsim.sh
-./xsim.dir/alone/axsim ./axsim.sh : $(SRC_FILES) $(INC_FILES)
+build : ./xsim.dir/$(TOP_MODULE).alone/axsim ./axsim.sh
+./xsim.dir/$(TOP_MODULE).alone/axsim ./axsim.sh : $(SRC_FILES) $(INC_FILES)
 	$(VLOG) -L uvm -sv $(INC_OPT) $(SRC_FILES) 
-	$(ELAB) $(TOP_MODULE) -L uvm -timescale 1ns/1ps --snapshot alone --standalone
+	$(ELAB) $(TOP_MODULE) -L uvm -timescale 1ns/1ps --snapshot $(TOP_MODULE).alone --standalone
 
 .PHONY : build_gui
-build_gui : ./xsim.dir/debug/xsimk
-./xsim.dir/debug/xsimk : $(SRC_FILES) $(INC_FILES)
+build_gui : ./xsim.dir/$(TOP_MODULE).debug/xsimk
+./xsim.dir/$(TOP_MODULE).debug/xsimk : $(SRC_FILES) $(INC_FILES)
 	$(VLOG) -L uvm -sv $(INC_OPT) $(SRC_FILES) 
-	$(ELAB) $(TOP_MODULE) -L uvm -timescale 1ns/1ps --snapshot debug --debug typical
+	$(ELAB) $(TOP_MODULE) -L uvm -timescale 1ns/1ps --snapshot $(TOP_MODULE).debug --debug typical
 
 .PHONY: clean
 clean:
