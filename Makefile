@@ -5,20 +5,29 @@
  SIM  := $(VIVADO_VER)/bin/xsim
 
 TOP_MODULE := mem_testbench
+TEST_NAME  := mem_test 
 
-.PHONY : all
+.PHONY : all build build_gui run gui run_% gui_%
 all :
 	make run_mem_test
 
-.PHONY : run_%
-run_% : build
-	./axsim.sh --testplusarg UVM_TESTNAME=$*
-	mv xsim.log xsim_$*.log
+build :
+	make -B ./xsim.dir/$(TOP_MODULE).alone/axsim ./axsim.sh
+build_gui :
+	make -B ./xsim.dir/$(TOP_MODULE).debug/xsimk
+
+run : ./xsim.dir/$(TOP_MODULE).alone/axsim ./axsim.sh
+	./axsim.sh --testplusarg UVM_TESTNAME=$(TEST_NAME)
+	mv xsim.log xsim_$(TEST_NAME).log
 #	$(SIM) $(TOP_MODULE).debug -R --testplusarg UVM_TESTNAME=mem_test
 
-.PHONY: gui_%
-gui_% : build_gui
-	$(SIM) $(TOP_MODULE).debug --gui --testplusarg UVM_TESTNAME=$* &
+gui : ./xsim.dir/$(TOP_MODULE).debug/xsimk
+	$(SIM) $(TOP_MODULE).debug --gui --testplusarg UVM_TESTNAME=$(TEST_NAME) &
+
+run_% : 
+	make run TEST_NAME=$*
+gui_% :
+	make gui TEST_NAME=$*
 
 SRC_FILES += ./DUT/memory.sv
 SRC_FILES += ./Agent/mem_agent_pkg.sv ./Agent/mem_if.sv
@@ -35,14 +44,10 @@ INC_OPT += --include ./Env
 INC_OPT += --include ./Seq
 INC_OPT += --include ./Test
 
-.PHONY : build
-build : ./xsim.dir/$(TOP_MODULE).alone/axsim ./axsim.sh
 ./xsim.dir/$(TOP_MODULE).alone/axsim ./axsim.sh : $(SRC_FILES) $(INC_FILES)
 	$(VLOG) -L uvm -sv $(INC_OPT) $(SRC_FILES) 
 	$(ELAB) $(TOP_MODULE) -L uvm -timescale 1ns/1ps --snapshot $(TOP_MODULE).alone --standalone
 
-.PHONY : build_gui
-build_gui : ./xsim.dir/$(TOP_MODULE).debug/xsimk
 ./xsim.dir/$(TOP_MODULE).debug/xsimk : $(SRC_FILES) $(INC_FILES)
 	$(VLOG) -L uvm -sv $(INC_OPT) $(SRC_FILES) 
 	$(ELAB) $(TOP_MODULE) -L uvm -timescale 1ns/1ps --snapshot $(TOP_MODULE).debug --debug typical
