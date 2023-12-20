@@ -4,6 +4,11 @@
  ELAB := $(VIVADO_VER)/bin/xelab
  SIM  := $(VIVADO_VER)/bin/xsim
 
+ UVM_OPT := -L uvm
+#UVM_PATH := $(HOME)/UVM/uvm-1.2
+#UVM_PATH := $(HOME)/UVM/1800.2-2020-2.0
+#UVM_OPT := --define UVM_NO_DPI --include $(UVM_PATH)/src $(UVM_PATH)/src/uvm_pkg.sv
+
 TOP_MODULE := mem_testbench
 TEST_NAME  := mem_test 
 
@@ -45,11 +50,11 @@ INC_OPT += --include ./Seq
 INC_OPT += --include ./Test
 
 ./xsim.dir/$(TOP_MODULE).alone/axsim ./axsim.sh : $(SRC_FILES) $(INC_FILES)
-	$(VLOG) -L uvm -sv $(INC_OPT) $(SRC_FILES) 
+	$(VLOG) -sv $(UVM_OPT) $(INC_OPT) $(SRC_FILES) 
 	$(ELAB) $(TOP_MODULE) -L uvm -timescale 1ns/1ps --snapshot $(TOP_MODULE).alone --standalone
 
 ./xsim.dir/$(TOP_MODULE).debug/xsimk : $(SRC_FILES) $(INC_FILES)
-	$(VLOG) -L uvm -sv $(INC_OPT) $(SRC_FILES) 
+	$(VLOG) -sv $(UVM_OPT) $(INC_OPT) $(SRC_FILES) 
 	$(ELAB) $(TOP_MODULE) -L uvm -timescale 1ns/1ps --snapshot $(TOP_MODULE).debug --debug typical
 
 .PHONY: clean
@@ -59,13 +64,12 @@ clean:
 	rm -rf *.log *.jou *.str
 	rm -fr *.vcd *.wdb
 
-.PHONY : git_add
+.PHONY : git_add git_push
 git_add :
 	git add .
 	git status
 	git commit
 
-.PHONY : git_push
 git_push :
 	git push
 
