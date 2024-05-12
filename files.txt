@@ -1,0 +1,7 @@
+DUT\memory.sv
+Agent\mem_agent_pkg.sv
+Agent\mem_if.sv
+Seq\mem_sequence_lib_pkg.sv
+Env\mem_env_pkg.sv
+Test\mem_test_lib_pkg.sv
+TB\mem_testbench.sv

@@ -16,3 +16,8 @@ _*
 *.pb
 *.wdb
 
+dsim_work
+*.env
+*.db
+*.mxd
+
