@@ -10,7 +10,7 @@ simulations:
   - name: elaborate
     options: '-top work.mem_testbench -uvm 1.2 -genimage image'
   - name: run_mem_test
-    options: '-image image +UVM_TESTNAME=mem_test'
+    options: '-uvm 1.2 -image image +UVM_TESTNAME=mem_test'
   - name: dumpwave
     options: >-
       -top work.mem_testbench -uvm 1.2 +UVM_TESTNAME=mem_test +acc+b -waves
