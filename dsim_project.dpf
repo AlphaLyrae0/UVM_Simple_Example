@@ -17,7 +17,22 @@ simulations:
       waves.mxd
 source_files:
   - language: verilog
-    path: files.txt
-    options: '-uvm 1.2 +incdir+Agent+Sequence+Env+Test+TB'
-    file_list: relative-to-workDir
+    path: DUT/memory.sv
+  - language: verilog
+    path: Agent/mem_agent_pkg.sv
+    options: '-uvm 1.2 +incdir+Agent'
+  - language: verilog
+    path: Agent/mem_if.sv
+  - language: verilog
+    path: Env/mem_env_pkg.sv
+    options: '-uvm 1.2 +incdir+Env'
+  - language: verilog
+    path: Seq/mem_sequence_lib_pkg.sv
+    options: '-uvm 1.2 +incdir+Seq'
+  - language: verilog
+    path: Test/mem_test_lib_pkg.sv
+    options: '-uvm 1.2 +incdir+Test'
+  - language: verilog
+    path: TB/mem_testbench.sv
+    options: '-uvm 1.2'
 library_search_paths: []
