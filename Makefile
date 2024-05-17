@@ -12,8 +12,8 @@ dsim_% :
 xsim_% :
 	make -f xsim.mk $*
 
-.PHONY: clean git_add git_push
-clean : xsim_clean dsim_clean 
+.PHONY: clean_all git_add git_push
+clean_all : xsim_clean dsim_clean 
 
 git_add :
 	git add .
