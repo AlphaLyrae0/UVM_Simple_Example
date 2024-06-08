@@ -6,20 +6,15 @@ else
   include xsim.mk
 endif
 
+run_% : 
+	make run TEST_NAME=$*
+gui_% :
+	make gui TEST_NAME=$*
+
 ## Manual Invoke
 dsim_% :
 	make -f dsim.mk $*
 xsim_% :
 	make -f xsim.mk $*
 
-.PHONY: clean_all git_add git_push
 clean_all : xsim_clean dsim_clean 
-
-git_add :
-	git add .
-	git status
-	git commit
-
-git_push :
-	git push
-

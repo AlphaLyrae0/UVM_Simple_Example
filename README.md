@@ -2,39 +2,49 @@
 
 Simple UVM example with Xilinx Vivado Simulator (xsim) and Metrics DSim Desktop.
 
-## [AMD (Xilinx) Vivado Simulator](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html)
+## [Metrics DSim](https://www.metrics.ca/)
 
-  To run a test with xsim
+Install and setup DSim Desktop on VS Code first. <BR>
+Do the following on your bash terminal.
 
-> make run_mem_test
+> source $HOME/metrics-ca/dsim/20240422.4.0/shell_activate.bash
+export DSIM_LICENSE=$HOME/metrics-ca/dsim-license.json
 
-or simply
+Change the path and tool version depending on your environment.
+
+### Batch run
 
 > make run
 
-on it
+DSim is automatically used if ${DSIM_HOME} is set on your bash terminal. <BR>
+Alternatively, you can explicitly specify DSim by the following.
 
-## [Metrics DSim](https://www.metrics.ca/)
+> make dsim_run
 
-To run a test with Dsim
-
-Install and setup Dsim Desktop on VS Code first
-
-### GUI run (Windows and Linux)
+### GUI run
 
   1. Open dsim_project.dpf project file in DSim Desktop extension.
   2. Click a triangle of LIBRAR CONFIGURATION pane to compile source files.
-  3. Click a triangle of 'all' in SIMULATION CONFIGURATION pane.
+  3. Click a triangle of 'build' in SIMULATION CONFIGURATION pane.
+  4. Click a triangle of 'run' in SIMULATION CONFIGURATION pane.
 
-### Batch run (Linux only)
 
-  1. Add a new DSim Desktop terminal on VS Code.
-  2. Hit
-      > make run_mem_test
+## [AMD (Xilinx) Vivado Simulator](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html)
 
-      or simply
+Change the path of XSIM in xsim.mk depending on your environment.
 
-      > make run
+### Batch run
 
-      on it
+> make run
 
+Or
+
+> make xsim_run
+
+### Launch GUI
+
+> make gui
+
+Or
+
+> make xsim_gui
