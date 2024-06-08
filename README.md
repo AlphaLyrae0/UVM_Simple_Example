@@ -1,6 +1,6 @@
 # UVM_Simple_Example
 
-Simple UVM example with Xilinx Vivado Simulator (xsim) and Metrics DSim Desktop.
+Simple UVM example with [Metrics DSim Desktop](https://www.metrics.ca/) and [Xilinx Vivado Simulator (xsim)](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html).
 
 ## [Metrics DSim](https://www.metrics.ca/)
 
@@ -8,7 +8,7 @@ Install and setup DSim Desktop on VS Code first. <BR>
 Do the following on your bash terminal.
 
 > source $HOME/metrics-ca/dsim/20240422.4.0/shell_activate.bash
-export DSIM_LICENSE=$HOME/metrics-ca/dsim-license.json
+> export DSIM_LICENSE=$HOME/metrics-ca/dsim-license.json
 
 Change the path and tool version depending on your environment.
 
@@ -29,7 +29,7 @@ Alternatively, you can explicitly specify DSim by the following.
   4. Click a triangle of 'run' in SIMULATION CONFIGURATION pane.
 
 
-## [AMD (Xilinx) Vivado Simulator](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html)
+## [AMD (Xilinx) Vivado Simulator (xsim)](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html)
 
 Change the path of XSIM in xsim.mk depending on your environment.
 
