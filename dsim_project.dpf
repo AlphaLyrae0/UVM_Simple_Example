@@ -7,7 +7,7 @@ design_root_dir: .
 simulations:
   - name: build
     options: '-top work.mem_testbench -uvm 1.2 -genimage mem_testbench'
-  - name: run_mem_test
+  - name: run
     options: '-uvm 1.2 -image mem_testbench +UVM_TESTNAME=mem_test +acc+b -waves waves.mxd'
 # - name: all
 #   options: '-top work.mem_testbench -uvm 1.2 +UVM_TESTNAME=mem_test +acc+b -waves waves.mxd'
