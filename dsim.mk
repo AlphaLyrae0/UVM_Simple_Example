@@ -9,7 +9,7 @@ run : $(TARGET)
 log :
 	code dsim.log
 
-waves :
+wave :
 	code waves.mxd
 
 clean:
