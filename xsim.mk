@@ -8,11 +8,9 @@ include common.mk
  ELAB := $(VIVADO_HOME)/bin/xelab
  SIM  := $(VIVADO_HOME)/bin/xsim
 
-#TARGET := ./xsim.dir/$(TOP_MODULE).alone/axsim ./axsim.sh
  TARGET := ./xsim.dir/$(TOP_MODULE)/xsimk
 run : $(TARGET)
-	$(SIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=mem_test -R
-#	./axsim.sh -testplusarg UVM_TESTNAME=$(TEST_NAME)
+	$(SIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=$(TEST_NAME) -R
 
 gui : $(TARGET)
 	$(SIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=$(TEST_NAME) -gui &
@@ -28,6 +26,13 @@ help  :
 
 build :
 	make -B $(TARGET)
+
+TARGET_ALONE := ./xsim.dir/$(TOP_MODULE).alone/axsim ./axsim.sh
+alone : $(TARGET_ALONE)
+	./axsim.sh -testplusarg UVM_TESTNAME=$(TEST_NAME)
+
+build_alone :
+	make -B $(TARGET_ALONE)
 
 #-------- For Internal UVM ----------
  VLOG_OPT := -L uvm
@@ -46,4 +51,7 @@ VLOG_OPT += --include ./Test
 $(TARGET) : $(SRC_FILES) $(INC_FILES)
 	$(VLOG) -sv $(VLOG_OPT) $(SRC_FILES) 
 	$(ELAB) $(TOP_MODULE) $(ELAB_OPT) -timescale 1ns/1ps -snapshot $(TOP_MODULE) -debug typical
-#	$(ELAB) $(TOP_MODULE) $(ELAB_OPT) -timescale 1ns/1ps -snapshot $(TOP_MODULE).alone -standalone
+
+$(TARGET_ALONE) : $(SRC_FILES) $(INC_FILES)
+	$(VLOG) -sv $(VLOG_OPT) $(SRC_FILES) 
+	$(ELAB) $(TOP_MODULE) $(ELAB_OPT) -timescale 1ns/1ps -snapshot $(TOP_MODULE).alone -standalone
