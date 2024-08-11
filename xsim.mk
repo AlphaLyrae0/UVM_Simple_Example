@@ -15,23 +15,17 @@ run : dump
 #run : $(TARGET)
 #	$(XSIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=$(TEST_NAME) -R
 dump : $(TARGET) ./dump_wdb.tcl
-	$(XSIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=$(TEST_NAME) -tclbatch dump_wdb.tcl -wdb ./all.wdb
-
+	$(XSIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=$(TEST_NAME) -tclbatch dump_wdb.tcl -wdb ./waves.wdb
 gui : $(TARGET)
 	$(XSIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=$(TEST_NAME) -gui &
-
-log :
+log : xsim.log
 	code xsim.log
-
-wave : ./all.wdb
-	$(XSIM) all.wdb -gui &
-
+wave : ./waves.wdb
+	$(XSIM) waves.wdb -gui &
 clean :
 	rm -fr xsim.dir axsim.sh .Xil *.pb *.log *.jou *.str *.vcd *.wdb dump_wdb.tcl
-
 help  :
 	$(XVLOG) -help; $(XELAB) -help; $(XSIM) -help
-
 build :
 	make -B $(TARGET)
 
@@ -64,7 +58,6 @@ $(TARGET) : $(SRC_FILES) $(INC_FILES)
 TARGET_ALONE := ./xsim.dir/$(TOP_MODULE).alone/axsim ./axsim.sh
 nodump : $(TARGET_ALONE)
 	./axsim.sh -testplusarg UVM_TESTNAME=$(TEST_NAME)
-
 build_alone :
 	make -B $(TARGET_ALONE)
 
