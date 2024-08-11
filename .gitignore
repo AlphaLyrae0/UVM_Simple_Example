@@ -20,4 +20,6 @@ dsim_work
 *.env
 *.db
 *.mxd
+axsim.sh
+dump_wdb.tcl
 
