@@ -11,7 +11,9 @@ include common.mk
  TARGET := ./xsim.dir/$(TOP_MODULE)/xsimk
 #run : $(TARGET)
 #	$(XSIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=$(TEST_NAME) -R
-run : ./all.wdb
+run :
+	rm ./all.wdb
+	make ./all.wdb
 ./all.wdb : $(TARGET) ./dump_wdb.tcl
 	$(XSIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=$(TEST_NAME) -tclbatch dump_wdb.tcl -wdb ./all.wdb
 
@@ -60,7 +62,7 @@ $(TARGET) : $(SRC_FILES) $(INC_FILES)
 
 #------------ For Alone Run --------------------
 TARGET_ALONE := ./xsim.dir/$(TOP_MODULE).alone/axsim ./axsim.sh
-run_alone : $(TARGET_ALONE)
+alone : $(TARGET_ALONE)
 	./axsim.sh -testplusarg UVM_TESTNAME=$(TEST_NAME)
 
 build_alone :

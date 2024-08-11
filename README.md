@@ -8,7 +8,7 @@ Install and setup DSim Desktop on VS Code first.
 Do the following on your bash terminal.
 
 ```bash
-source $HOME/metrics-ca/dsim/<Installed DSim Version>/shell_activate.bash
+source $HOME/metrics-ca/dsim/<DSim Version>/shell_activate.bash
 export DSIM_LICENSE=$HOME/metrics-ca/dsim-license.json
 ```
 
