@@ -8,12 +8,13 @@ include common.mk
  XELAB := $(VIVADO_HOME)/bin/xelab
  XSIM  := $(VIVADO_HOME)/bin/xsim
 
+run : dump
+#run : nodump
+
  TARGET := ./xsim.dir/$(TOP_MODULE)/xsimk
 #run : $(TARGET)
 #	$(XSIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=$(TEST_NAME) -R
-run :
-	rm -f ./all.wdb; make ./all.wdb
-./all.wdb : $(TARGET) ./dump_wdb.tcl
+dump : $(TARGET) ./dump_wdb.tcl
 	$(XSIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=$(TEST_NAME) -tclbatch dump_wdb.tcl -wdb ./all.wdb
 
 gui : $(TARGET)
@@ -61,7 +62,7 @@ $(TARGET) : $(SRC_FILES) $(INC_FILES)
 
 #------------ For Alone Run --------------------
 TARGET_ALONE := ./xsim.dir/$(TOP_MODULE).alone/axsim ./axsim.sh
-alone : $(TARGET_ALONE)
+nodump : $(TARGET_ALONE)
 	./axsim.sh -testplusarg UVM_TESTNAME=$(TEST_NAME)
 
 build_alone :
