@@ -4,11 +4,11 @@ Simple UVM example with [Metrics DSim Desktop](https://www.metrics.ca/) and [Xil
 
 ## [Metrics DSim](https://www.metrics.ca/)
 
-Install and setup DSim Desktop on VS Code first. <BR>
+Install and setup DSim Desktop on VS Code first.  
 Do the following on your bash terminal.
 
 ```bash
-source $HOME/metrics-ca/dsim/20240422.4.0/shell_activate.bash
+source $HOME/metrics-ca/dsim/<Installed DSim Version>/shell_activate.bash
 export DSIM_LICENSE=$HOME/metrics-ca/dsim-license.json
 ```
 
@@ -20,7 +20,7 @@ Change the path and tool version depending on your environment.
  make run
  ```
 
-DSim is automatically used if ${DSIM_HOME} is set on your bash terminal. <BR>
+DSim is automatically used if ${DSIM_HOME} is set on your bash terminal.  
 Alternatively, you can explicitly specify DSim by the following.
 
 ```bash
