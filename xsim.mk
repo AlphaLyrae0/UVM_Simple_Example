@@ -12,8 +12,7 @@ include common.mk
 #run : $(TARGET)
 #	$(XSIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=$(TEST_NAME) -R
 run :
-	rm ./all.wdb
-	make ./all.wdb
+	rm -f ./all.wdb; make ./all.wdb
 ./all.wdb : $(TARGET) ./dump_wdb.tcl
 	$(XSIM) $(TOP_MODULE) -testplusarg UVM_TESTNAME=$(TEST_NAME) -tclbatch dump_wdb.tcl -wdb ./all.wdb
 
