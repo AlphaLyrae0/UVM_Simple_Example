@@ -1,21 +1,22 @@
 
-include common.mk
-
 ifdef XILINX_VIVADO
  XVLOG := xvlog
  XELAB := xelab
  XSIM  := xsim
 else
+ VIVADO_DIR  := /tools/Xilinx/Vivado
 #VIVADO_VER  := 2022.2
- VIVADO_VER  := 2023.1
- VIVADO_HOME := /tools/Xilinx/Vivado/$(VIVADO_VER)
+#VIVADO_VER  := 2023.1
+ VIVADO_HOME := $(shell ls -td1 $(VIVADO_DIR)/* | head -n 1)
  XVLOG := $(VIVADO_HOME)/bin/xvlog
  XELAB := $(VIVADO_HOME)/bin/xelab
  XSIM  := $(VIVADO_HOME)/bin/xsim
+#$(VIVADO_HOME)/settings64.csh
+#$(VIVADO_HOME)/settings64.sh
 endif
 
-run : dump
-#run : nodump
+#run : dump
+run : nodump
 
  TARGET := ./xsim.dir/$(TOP_MODULE)/xsimk
 #run : $(TARGET)
