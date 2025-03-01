@@ -4,7 +4,7 @@
 ./Agent/mem_agent_pkg.sv
 ./Agent/mem_if.sv
 
-+inccir+Env
++incdir+Env
 ./Env/mem_env_pkg.sv
 
 +incdir+Sequence
