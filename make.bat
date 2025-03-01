@@ -35,6 +35,16 @@ if "%1" == "run" (
     goto :EOF
 )
 
+if "%1" == "log" (
+	code ./dsim.log
+    goto :EOF
+)
+
+if "%1" == "wave" (
+	code -n ./waves.mxd
+    goto :EOF
+)
+
 if "%1" == "clean" (
     rmdir /S /Q "dsim_work"
     del /Q "*.env" "metrics.db" "*.mxd" "*.vcd" "*.log"
