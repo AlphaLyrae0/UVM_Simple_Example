@@ -2,10 +2,12 @@ ifdef DSIM_HOME
   DSIM_CMD  := dsim 
 else
   DSIM_DIR  := ${HOME}/metrics-ca/dsim
+ #DSIM_DIR  := ${HOME}/AltairDSim
   DSIM_HOME := $(shell ls -t1d $(DSIM_DIR)/* | head -n 1)
   DSIM_SCR  := $(DSIM_HOME)/shell_activate.bash
   DSIM_CMD  := $(DSIM_SCR); dsim 
-  export DSIM_LICENSE := $(DSIM_DIR)/dsim-license.json
+ #export DSIM_LICENSE := $(DSIM_DIR)/dsim-license.json
+  export DSIM_LICENSE := ${HOME}/metrics-ca/dsim/dsim-license.json
 endif
 
 run : dump
