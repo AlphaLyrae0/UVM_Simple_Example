@@ -2,32 +2,60 @@
 
 Simple UVM example with [Metrics DSim Desktop](https://www.metrics.ca/) and [Xilinx Vivado Simulator (xsim)](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html).
 
-## [Metrics DSim](https://www.metrics.ca/)
+## [ Altair (Metrics) DSim](https://www.metrics.ca/)
 
-Install and setup DSim Desktop on VS Code first.  
-Do the following on your bash terminal.
+### Batch Run
+
+#### Linux Bash Terminal
+
+Although, it is not necessary, doing the following setup on your bash terminal is recommended.
 
 ```bash
 source $HOME/metrics-ca/dsim/<DSim Version>/shell_activate.bash
 export DSIM_LICENSE=$HOME/metrics-ca/dsim-license.json
 ```
 
-Change the path and tool version depending on your environment.
+Change the path and tool version depending on your environment.  
+Similar setup is also done inside Makefile if this setup is not done.  
 
-### Batch run
+To compile and run a test.
 
 ```bash
- make run
+make run
  ```
 
 DSim is automatically used if ${DSIM_HOME} is set on your bash terminal.  
 Alternatively, you can explicitly specify DSim by the following.
 
 ```bash
- make dsim_run
+make dsim_run
  ```
 
-### GUI run
+#### Windows Command Prompt
+
+Besides Makefile for Linux, ./make.bat for Windows is available. You can use similar commands as Linux make.
+
+```bat
+make
+```
+or
+
+```bat
+make build
+make run
+```
+
+`./` is necessary in case of Windos PowerShell.
+
+```bat
+./make
+```
+```bat
+./make build
+./make run
+```
+
+### GUI Run
 
   1. Open dsim_project.dpf project file in DSim Desktop extension.
   2. Click a triangle of LIBRAR CONFIGURATION pane to compile source files.
@@ -39,10 +67,10 @@ Alternatively, you can explicitly specify DSim by the following.
 
 Change the path of XSIM in xsim.mk depending on your environment.
 
-### Batch run
+### Batch Run
 
 ```bash
-make run
+make run USE_XSIM=1
 ```
 
 Or
@@ -54,7 +82,7 @@ make xsim_run
 ### Launch GUI
 
 ```bash
-make gui
+make gui USE_XSIM=1
 ```
 
 Or
