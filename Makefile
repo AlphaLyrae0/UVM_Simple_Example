@@ -13,9 +13,17 @@ SRC_FILES += ./TB/mem_testbench.sv
 INC_FILES += $(shell ls ./Agent/*.svh)
 INC_FILES += $(shell ls ./Env/*.svh)
 
-USE_XSIM := 0
+SIMULATOR := DSIM
+ifdef USE_XSIM
+  SIMULATOR := XSIM
+endif
+ifdef USE_DSIM
+  SIMULATOR := DSIM
+endif
 
-ifeq ($(USE_XSIM),1)
+all : build run
+
+ifeq ($(SIMULATOR),XSIM)
   include xsim.mk
 else
   include dsim.mk
@@ -23,12 +31,10 @@ endif
 
 run_% : 
 	make run TEST_NAME=$*
-gui_% :
-	make gui TEST_NAME=$*
 
 ## Manual Invoke
 dsim_% :
-	make $* USE_XSIM=0 
+	make $* USE_DSIM=1 
 xsim_% :
 	make $* USE_XSIM=1 
 

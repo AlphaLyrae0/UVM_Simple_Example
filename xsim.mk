@@ -36,6 +36,9 @@ help  :
 build :
 	make -B $(TARGET)
 
+gui_% :
+	make gui TEST_NAME=$*
+
 #-------- For Internal UVM ----------
  VLOG_OPT := -L uvm
  ELAB_OPT := -L uvm
