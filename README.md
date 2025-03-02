@@ -4,9 +4,7 @@ Simple UVM example with [Altair (Metrics) DSim Desktop](https://www.metrics.ca/)
 
 ## [ Altair (Metrics) DSim](https://www.metrics.ca/)
 
-### Batch Run (Linux)
-
-Makefile is available for Linux batch run.
+### Linux (Batch Run)
 
 * Setup (optional)
 
@@ -17,7 +15,9 @@ Makefile is available for Linux batch run.
 
   Change the path and tool version depending on your environment. Similar setup is done inside dsim.mk if this setup is not done.  
 
-* Compile and run a test
+* Run a test
+
+  Makefile is available for Linux batch run.
 
   ```bash
   make run
@@ -29,9 +29,7 @@ Makefile is available for Linux batch run.
   make dsim_run
   ```
 
-### Batch Run (Windows Command Prompt or PowerShell)
-
-Besides Makefile for Linux, ./make.bat for Windows is available. You can use similar commands as Linux make.
+### Windows (Batch run)
 
 * Setup (Optional)
 
@@ -42,7 +40,9 @@ Besides Makefile for Linux, ./make.bat for Windows is available. You can use sim
 
   Change the path and tool version depending on your environment. Same setup is done inside make.bat.
 
-* Compile and run a test
+* Run a test (Comand Prompt)
+
+  Besides Makefile for Linux, ./make.bat for Windows is available. You can use similar commands as Linux make.
 
   ```bat
   make
@@ -54,7 +54,9 @@ Besides Makefile for Linux, ./make.bat for Windows is available. You can use sim
   make run
   ```
 
-  `./` is necessary in case of Windos PowerShell.
+* Run a test (PowerShell)
+
+  For Windos PowerShell, `./` is necessary.
 
   ```bat
   ./make
@@ -65,7 +67,7 @@ Besides Makefile for Linux, ./make.bat for Windows is available. You can use sim
   ./make run
   ```
 
-### GUI Run (On VS Code)
+### VS Code GUI Run (Both of Windows and Linux)
 
   1. Open dsim_project.dpf project file in DSim Desktop extension.
   2. Click a triangle of LIBRAR CONFIGURATION pane to compile source files.
@@ -75,9 +77,7 @@ Besides Makefile for Linux, ./make.bat for Windows is available. You can use sim
 
 ## [AMD (Xilinx) Vivado Simulator (xsim)](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html)
 
-Change the path of XSIM in xsim.mk depending on your environment.
-
-### Batch Run (Linux)
+### Linux
 
 * Setup (Optional)
 
@@ -87,7 +87,12 @@ Change the path of XSIM in xsim.mk depending on your environment.
 
   Change the path and tool version depending on your environment. Similar setup is done inside xsim.mk.
 
-* Compile and run a test
+* Batch Run
+
+  ```bash
+  make run
+  ```
+  Xsim is automatically used if the Xsim setup above is done. If both of DSim and Xsim setup are done, then, DSim is selected. In that case, you can explicitly specify Xsim adding USE_XSIM=1 environment variable.
 
   ```bash
   export USE_XSIM=1
@@ -107,35 +112,14 @@ Change the path of XSIM in xsim.mk depending on your environment.
   make run USE_XSIM=1
   ```
 
-  Or
+  Alternatively, you can add `xsim_` before the commands.
 
   ```bash
   make xsim_run
   ```
 
-### Launch GUI (Linux)
-
-* Compile and run a test
+* GUI launch
 
   ```bash
-  export USE_XSIM=1
   make gui
-  ```
-
-  Or
-
-  ```bash
-  env USE_XSIM=1 make gui
-  ```
-
-  Or
-
-  ```bash
-  make gui USE_XSIM=1
-  ```
-
-  Or
-
-  ```bash
-  make xsim_gui
   ```

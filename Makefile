@@ -27,13 +27,13 @@ ifdef USE_DSIM
   SIMULATOR := DSIM
 endif
 
-all : build run
-
 ifeq ($(SIMULATOR),XSIM)
   include xsim.mk
 else
   include dsim.mk
 endif
+
+all : build run
 
 run_% : 
 	make run TEST_NAME=$*
