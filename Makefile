@@ -14,6 +14,12 @@ INC_FILES += $(shell ls ./Agent/*.svh)
 INC_FILES += $(shell ls ./Env/*.svh)
 
 SIMULATOR := DSIM
+ifdef XILINX_VIVADO
+  SIMULATOR := XSIM
+endif
+ifdef DSIM_HOME
+  SIMULATOR := DSIM
+endif
 ifdef USE_XSIM
   SIMULATOR := XSIM
 endif

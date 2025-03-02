@@ -13,10 +13,9 @@ endif
 run : dump
 #run : nodump
 
-TARGET := dsim_work/$(TOP_MODULE).so
-dump : $(TARGET)
-	$(DSIM_CMD) -uvm 1.2 -image $(TOP_MODULE) +UVM_TESTNAME=$(TEST_NAME) -waves ./waves.mxd
-log : ./dsim.log
+dump : ./dsim_work/dump_image.so
+	$(DSIM_CMD) -uvm 1.2 -image dump_image +UVM_TESTNAME=$(TEST_NAME) -waves ./waves.mxd
+log  : ./dsim.log
 	code ./dsim.log
 wave : ./waves.mxd
 	code -n ./waves.mxd
@@ -25,18 +24,17 @@ clean:
 help :
 	$(DSIM_CMD) -help
 build :
-	make -B $(TARGET)
+	make -B ./dsim_work/dump_image.so
 
-$(TARGET) : $(SRC_FILES) $(INC_FILES)
-	$(DSIM_CMD) -uvm 1.2 -top $(TOP_MODULE) +incdir+Agent+Sequence+Env+Test+TB $(SRC_FILES) -genimage $(TOP_MODULE) +acc+b
+./dsim_work/dump_image.so : $(SRC_FILES) $(INC_FILES)
+	$(DSIM_CMD) -uvm 1.2 -top $(TOP_MODULE) +incdir+Agent+Sequence+Env+Test+TB $(SRC_FILES) -genimage dump_image +acc+b
 
 
 #------------- No Wave Dump Run -------------------------
-TARGET_NODUMP := dsim_work/$(TOP_MODULE)_nodump.so
-nodump : $(TARGET_NODUMP)
-	$(DSIM_CMD) -uvm 1.2 -image $(TOP_MODULE)_nodump +UVM_TESTNAME=$(TEST_NAME)
-build_nodump :
-	make -B $(TARGET_NODUMP)
+nodump       : ./dsim_work/nodump_image.so
+	$(DSIM_CMD) -uvm 1.2 -image nodump +UVM_TESTNAME=$(TEST_NAME)
+nodump_build :
+	make -B ./dsim_work/nodump_image.so
 
-$(TARGET_NODUMP) : $(SRC_FILES) $(INC_FILES)
-	$(DSIM_CMD) -uvm 1.2 -top $(TOP_MODULE) +incdir+Agent+Sequence+Env+Test+TB $(SRC_FILES) -genimage $(TOP_MODULE)_nodump
+./dsim_work/nodump_image.so : $(SRC_FILES) $(INC_FILES)
+	$(DSIM_CMD) -uvm 1.2 -top $(TOP_MODULE) +incdir+Agent+Sequence+Env+Test+TB $(SRC_FILES) -genimage nodump_image
