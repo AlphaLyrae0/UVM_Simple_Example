@@ -2,8 +2,8 @@
 
 if "%DSIM_HOME%" == "" (
     echo "DSIM_HOME is not set. Setup of DSim is done automatically."
-    call "%LOCALAPPDATA%\metrics-ca\dsim\20240923.9.0\shell_activate.bat"
-REM call "%ProgramFiles%\Altair\DSim\2025\shell_activate.bat"
+REM call "%LOCALAPPDATA%\metrics-ca\dsim\20240923.9.0\shell_activate.bat"
+    call "%ProgramFiles%\Altair\DSim\2025\shell_activate.bat"
     set DSIM_LICENSE=%LOCALAPPDATA%\metrics-ca\dsim-license.json
 )
 
